@@ -1,9 +1,10 @@
 import praw
 import json
 import time
+from praw.exceptions import PRAWException, APIException
 
 # Helper Variables
-postCount = 1
+postCount = 0
 postLimit = 2000
 
 # Reddit developer account: 
@@ -36,29 +37,42 @@ reddit = praw.Reddit(
 
 for post in reddit.subreddit("WritingPrompts").new(limit=postLimit):
     # grab dictionary with attributes of object using vars()
-    to_dict = vars(post)
-    print(f"Parsing: ({post.title})[{postCount}:{postLimit}]")
-
-    # grab specific attributes specified in fields, written above, for current post
-    sub_dict = {field:to_dict[field] for field in fields}
-
-    # grab all comments for the current post
-    comments = []
-    post.comments.replace_more(limit=None)
-    # Helper counter for comments
-    commentCount = 1
-    print("Downloading Comments . . . ")
-    for comment in post.comments.list():
-        print(commentCount)
-        comments.append(comment.body)
-        commentCount += 1
-    sub_dict['comments'] = comments
-
-    # Create a new container that just has the field we want
-    items.append(sub_dict)
-    postCount += 1
-
-    time.sleep(0.7)
+    while True:
+        try:
+            # Rate limiting
+            time.sleep(2)  # Introduce a 2-second pause between fetching posts
+            postCount += 1
+            
+            to_dict = vars(post)
+            print(f"Parsing: ({post.title})[{postCount}:{postLimit}]")
+        
+            # grab specific attributes specified in fields, written above, for current post
+            sub_dict = {field:to_dict[field] for field in fields}
+        
+            # grab all comments for the current post
+            comments = []
+            post.comments.replace_more(limit=None)
+            # Helper counter for comments
+            commentCount = 0
+            print("Downloading Comments . . . ")
+            for comment in post.comments.list():
+                comments.append(comment.body)
+                commentCount += 1
+            print(commentCount)
+            sub_dict['comments'] = comments
+        
+            # Create a new container that just has the field we want
+            items.append(sub_dict)
+            
+            if postCount >= postLimit:
+                raise StopIteration
+    
+            break
+        except (PRAWException, APIException) as e:
+            # Handle exceptions related to rate limiting
+            print(f"Exception: {e}")
+            print("Retrying after 5 seconds...")
+            time.sleep(5)
 
 # for item in items:
 #     print(item)
