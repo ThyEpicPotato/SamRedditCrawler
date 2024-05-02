@@ -3,7 +3,7 @@ import json
 
 # Helper Variables
 postCount = 1
-postLimit = 1000
+postLimit = 500
 
 # Reddit developer account: 
 ID          = "dhEQFnUAHSZc4kXHZN-AJw"
