@@ -6,9 +6,9 @@ postCount = 1
 postLimit = 10
 
 # Reddit developer account: 
-ID          = ""
-SECRET      = ""
-AGENT       = ""
+ID          = "dhEQFnUAHSZc4kXHZN-AJw"
+SECRET      = "ouK2JNVZnBMlUkMOY0RyFwFcCTBB9g"
+AGENT       = "cs172"
 
 # Json setup:
 items = []
@@ -33,7 +33,7 @@ reddit = praw.Reddit(
     user_agent=AGENT
 )
 
-for post in reddit.subreddit("Helldivers").new(limit=postLimit):
+for post in reddit.subreddit("WritingPrompts").new(limit=postLimit):
     # grab dictionary with attributes of object using vars()
     to_dict = vars(post)
     print(f"Parsing: ({post.title})[{postCount}:{postLimit}]")
@@ -61,5 +61,5 @@ for post in reddit.subreddit("Helldivers").new(limit=postLimit):
 #     print(item)
 # Dump into json format and write to crawl.json
 json_str = json.dumps(items)
-with open('crawl.json', 'w') as f:
+with open('WritingPrompts.json', 'w') as f:
     json.dump(items, f)
