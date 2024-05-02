@@ -5,7 +5,7 @@ from praw.exceptions import PRAWException, APIException
 
 # Helper Variables
 postCount = 0
-postLimit = 2000
+postLimit = 5000
 
 # Reddit developer account: 
 ID          = "dhEQFnUAHSZc4kXHZN-AJw"
@@ -40,7 +40,7 @@ for post in reddit.subreddit("WritingPrompts").new(limit=postLimit):
     while True:
         try:
             # Rate limiting
-            time.sleep(2)  # Introduce a 2-second pause between fetching posts
+            time.sleep(0.5)
             postCount += 1
             
             to_dict = vars(post)
