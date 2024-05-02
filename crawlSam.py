@@ -4,7 +4,7 @@ import time
 
 # Helper Variables
 postCount = 1
-postLimit = 1000
+postLimit = 2000
 
 # Reddit developer account: 
 ID          = "dhEQFnUAHSZc4kXHZN-AJw"
@@ -58,7 +58,7 @@ for post in reddit.subreddit("WritingPrompts").new(limit=postLimit):
     items.append(sub_dict)
     postCount += 1
 
-    time.sleep(0.5)
+    time.sleep(0.7)
 
 # for item in items:
 #     print(item)
