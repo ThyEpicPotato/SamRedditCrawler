@@ -1,9 +1,10 @@
 import praw
 import json
+import time
 
 # Helper Variables
 postCount = 1
-postLimit = 500
+postLimit = 1000
 
 # Reddit developer account: 
 ID          = "dhEQFnUAHSZc4kXHZN-AJw"
@@ -56,6 +57,8 @@ for post in reddit.subreddit("WritingPrompts").new(limit=postLimit):
     # Create a new container that just has the field we want
     items.append(sub_dict)
     postCount += 1
+
+    time.sleep(0.5)
 
 # for item in items:
 #     print(item)
