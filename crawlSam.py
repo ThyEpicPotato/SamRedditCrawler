@@ -2,6 +2,7 @@ import praw
 import json
 import time
 from praw.exceptions import PRAWException, APIException
+from prawcore.exceptions import ResponseException
 
 # Helper Variables
 postCount = 0
@@ -68,11 +69,21 @@ for post in reddit.subreddit("leagueoflegends").new(limit=postLimit):
                 raise StopIteration
     
             break
+            
+        except ResponseException as e:
+            if e.response.status_code == 429:
+                # Handle rate limiting
+                print("Rate limited. Retrying after 5 seconds...")
+                time.sleep(5)
+            else:
+                # Handle other HTTP errors
+                print(f"HTTP Error: {e}")
+                break
+                
         except (PRAWException, APIException) as e:
-            # Handle exceptions related to rate limiting
+            # Handle other PRAW exceptions
             print(f"Exception: {e}")
-            print("Retrying after 5 seconds...")
-            time.sleep(5)
+            break
 
 # for item in items:
 #     print(item)
