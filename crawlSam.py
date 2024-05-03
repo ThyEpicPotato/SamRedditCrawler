@@ -36,7 +36,7 @@ reddit = praw.Reddit(
     user_agent=AGENT
 )
 
-for post in reddit.subreddit("leagueoflegends").new(limit=postLimit):
+for post in reddit.subreddit("news").new(limit=postLimit):
     # grab dictionary with attributes of object using vars()
     while True:
         try:
@@ -89,5 +89,5 @@ for post in reddit.subreddit("leagueoflegends").new(limit=postLimit):
 #     print(item)
 # Dump into json format and write to crawl.json
 json_str = json.dumps(items)
-with open('leagueoflegends.json', 'w') as f:
+with open('news.json', 'w') as f:
     json.dump(items, f)
